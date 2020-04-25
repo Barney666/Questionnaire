@@ -50,7 +50,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.8</version>
+            <version>1.18.4</version>
+            <!--原本的版本太低了 和java11不兼容-->
             <scope>provided</scope>
         </dependency>
 

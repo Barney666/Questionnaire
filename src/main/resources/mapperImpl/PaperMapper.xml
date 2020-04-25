@@ -17,4 +17,5 @@
     <select id="getUserPapers" resultType="com.computer.network.vo.PaperVO">
         select * from PAPER where user_id=#{userId}
     </select>
+
 </mapper>

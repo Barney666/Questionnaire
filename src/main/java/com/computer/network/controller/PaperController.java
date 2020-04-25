@@ -6,7 +6,6 @@ import com.computer.network.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/api/paper")
 public class PaperController {
@@ -27,8 +26,10 @@ public class PaperController {
     public ResponseVO invalidatePaper(@PathVariable Integer paperId){
         return paperService.invalidatePaper(paperId);
     }
+
     @GetMapping("/{userId}/getUserPapers")
     public ResponseVO getUserPapers(@PathVariable Integer userId){
         return paperService.getUserPapers(userId);
     }
+
 }
