@@ -10,6 +10,7 @@ DROP TABLE IF EXISTS `PAPER`;
 CREATE TABLE `PAPER`
 (
   `id`          int         NOT NULL AUTO_INCREMENT,
+  `user_id`     int         NOT NULL,
   `title`       varchar(64) NOT NULL,
   `description` varchar(64) NOT NULL,
   `start_time`  datetime    NOT NULL,
@@ -48,7 +49,7 @@ CREATE TABLE `ANSWER`
 
 INSERT INTO USER(PASSWORD, NAME) VALUES ('admin','admin');
 
-INSERT INTO PAPER(TITLE, DESCRIPTION, START_TIME, END_TIME, STATUS) VALUES ('测试问卷1','这是一个问卷','2020-04-22 00:00:00','2020-06-15 00:00:00',1);
+INSERT INTO PAPER(USER_ID,TITLE,DESCRIPTION, START_TIME, END_TIME, STATUS) VALUES (1,'测试问卷1','这是一个问卷','2020-04-22 00:00:00','2020-06-15 00:00:00',1);
 
 insert into QUESTION(paper_id, type, title) values (1,1,'第一个问题 单选题');
 insert into QUESTION(paper_id, type, title) values (1,2,'第二个问题 多选题');

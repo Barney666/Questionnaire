@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper>
-
+<mapper namespace="com.computer.network.mapper.PaperMapper">
+    <insert id="addPaper" parameterType="com.computer.network.vo.PaperVO" useGeneratedKeys="true" keyProperty="id">
+        insert into PAPER(user_id,title,description,start_time,end_time,status) values(#{userId},#{title},#{description},#{startTime},#{endTime},#{status})
+    </insert>
+    <update id="updatePaper" parameterType="com.computer.network.vo.PaperVO">
+        update PAPER set title=#{title},description=#{description},start_time=#{startTime},end_time=#{endTime} where id=#{id}
+    </update>
+    <select id="selectByPaperId" resultType="com.computer.network.po.Paper">
+        select * from PAPER where id=#{paperId}
+    </select>
+    <update id="invalidatePaper">
+        update PAPER set status=0 where id=#{paperId}
+    </update>
+    <select id="getUserPapers" resultType="com.computer.network.vo.PaperVO">
+        select * from PAPER where user_id=#{userId}
+    </select>
 </mapper>

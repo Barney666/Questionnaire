@@ -7,6 +7,7 @@ import lombok.Data;
 @AllArgsConstructor
 public class Paper {
     private Integer id;
+    private Integer userId;
     private String title;
     private String description;
     private String startTime;
