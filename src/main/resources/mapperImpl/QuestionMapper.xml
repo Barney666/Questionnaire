@@ -1,6 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.computer.network.mapper.OptionsMapper">
+<mapper namespace="com.computer.network.mapper.QuestionMapper">
+    <insert id="addQuestion" parameterType="com.computer.network.vo.QuestionVO">
+        insert into QUESTION(paper_id,type,title) values(#{paperId},#{type},#{title})
+    </insert>
 
+    <update id="updateQuestion" parameterType="com.computer.network.vo.QuestionVO">
+        update QUESTION set title=#{title} where id=#{id}
+    </update>
+
+    <select id="selectByQuestionId" resultType="com.computer.network.po.Question">
+        select * from QUESTION where id=#{id}
+    </select>
+
+    <delete id="deleteQuestion">
+        delete from QUESTION where id=#{questionId}
+    </delete>
 </mapper>

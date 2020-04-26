@@ -32,4 +32,8 @@ public class PaperController {
         return paperService.getUserPapers(userId);
     }
 
+    @GetMapping("/{paperId}/checkPaper")
+    public ResponseVO checkPaper(@PathVariable Integer paperId){
+
+    }
 }

@@ -2,5 +2,16 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.computer.network.mapper.OptionsMapper">
-
+    <insert id="addOption" parameterType="com.computer.network.vo.OptionsVO">
+        insert into OPTIONS(question_id,content) values(#{questionId},#{content})
+    </insert>
+    <select id="selectById" resultType="com.computer.network.po.Options">
+        select * from OPTIONS where id=#{id}
+    </select>
+    <update id="updateOption" parameterType="com.computer.network.vo.OptionsVO">
+        update OPTIONS set content=#{content} where id=#{id}
+    </update>
+    <delete id="deleteOption">
+        delete from OPTIONS where id=#{id}
+    </delete>
 </mapper>
