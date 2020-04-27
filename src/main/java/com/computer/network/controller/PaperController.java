@@ -34,6 +34,11 @@ public class PaperController {
 
     @GetMapping("/{paperId}/checkPaper")
     public ResponseVO checkPaper(@PathVariable Integer paperId){
+        return paperService.checkPaper(paperId);
+    }
 
+    @GetMapping("/{paperId}/reviewPaper")
+    public ResponseVO reviewPaper(@PathVariable Integer paperId){
+        return paperService.reviewPaper(paperId);
     }
 }

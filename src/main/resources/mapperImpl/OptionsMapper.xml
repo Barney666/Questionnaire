@@ -5,13 +5,20 @@
     <insert id="addOption" parameterType="com.computer.network.vo.OptionsVO">
         insert into OPTIONS(question_id,content) values(#{questionId},#{content})
     </insert>
+
     <select id="selectById" resultType="com.computer.network.po.Options">
         select * from OPTIONS where id=#{id}
     </select>
+
     <update id="updateOption" parameterType="com.computer.network.vo.OptionsVO">
         update OPTIONS set content=#{content} where id=#{id}
     </update>
+
     <delete id="deleteOption">
         delete from OPTIONS where id=#{id}
     </delete>
+
+    <select id="selectByQuestionId" resultType="com.computer.network.vo.OptionsVO">
+        select * from OPTIONS where question_id=#{questionId} order by id
+    </select>
 </mapper>

@@ -17,4 +17,8 @@
     <delete id="deleteQuestion">
         delete from QUESTION where id=#{questionId}
     </delete>
+
+    <select id="selectByPaperId" resultType="com.computer.network.vo.QuestionVO">
+        select * from QUESTION where paper_id=#{paperId} order by id
+    </select>
 </mapper>

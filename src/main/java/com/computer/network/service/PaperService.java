@@ -12,4 +12,8 @@ public interface PaperService {
     ResponseVO invalidatePaper(int paperId);
 
     ResponseVO getUserPapers(int userId);
+
+    ResponseVO checkPaper(int paperId);
+
+    ResponseVO reviewPaper(int paperId);
 }

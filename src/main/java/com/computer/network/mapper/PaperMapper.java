@@ -20,4 +20,5 @@ public interface PaperMapper {
     void invalidatePaper(int paperId);
 
     List<PaperVO> getUserPapers(int userId);
+
 }

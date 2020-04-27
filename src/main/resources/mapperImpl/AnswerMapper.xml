@@ -6,4 +6,8 @@
     <insert id="addAnswer" parameterType="com.computer.network.vo.AnswerVO">
         insert into ANSWER(paper_id,question_id,question_type,create_time,answer_content) values(#{paperId},#{questionId},#{questionType},#{createTime},#{answerContent})
     </insert>
+
+    <select id="selectByQuestionId" resultType="com.computer.network.vo.AnswerVO">
+        select * from ANSWER where question_id=#{questionId} order by id
+    </select>
 </mapper>

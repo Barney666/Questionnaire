@@ -5,6 +5,8 @@ import com.computer.network.vo.OptionsVO;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Mapper
 @Repository
 public interface OptionsMapper {
@@ -16,4 +18,6 @@ public interface OptionsMapper {
     Options selectById(int id);
 
     void deleteOption(int id);
+
+    List<OptionsVO> selectByQuestionId(int questionId);
 }
