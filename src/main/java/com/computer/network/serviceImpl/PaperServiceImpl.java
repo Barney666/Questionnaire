@@ -98,7 +98,7 @@ public class PaperServiceImpl implements PaperService {
             else if(paper.getStatus()==0 || new SimpleDateFormat("yyyy-MM-dd").format(new Date()).compareTo(paper.getEndTime())>0)
                 return ResponseVO.buildFailure(INVALIDATION);
             else{
-                //泛型表示的每个List：第一个放QuestionVO，后面是List<OptionVO>
+                //泛型表示的每个List：第一个放QuestionVO，第二个放List<OptionVO>
                 List<List> allPaperData=new ArrayList<>();
                 List<QuestionVO> questionVOList=questionMapper.selectByPaperId(paperId);
                 for(QuestionVO questionVO:questionVOList){
@@ -126,7 +126,7 @@ public class PaperServiceImpl implements PaperService {
             else if(paper.getStatus()==0 || new SimpleDateFormat("yyyy-MM-dd").format(new Date()).compareTo(paper.getEndTime())>0)
                 return ResponseVO.buildFailure(INVALIDATION);
             else{
-                //泛型表示的每个List：第一个放QuestionVO，后面是List<OptionVO>
+                //泛型表示的每个List：第一个放QuestionVO，第二个放List<OptionCaseVO>
                 List<List> allPaperData=new ArrayList<>();
 
                 List<QuestionVO> questionVOList=questionMapper.selectByPaperId(paperId);

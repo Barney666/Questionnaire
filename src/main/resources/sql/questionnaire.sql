@@ -28,7 +28,7 @@ CREATE TABLE `QUESTION`
   PRIMARY KEY (`id`)
 );
 DROP TABLE IF EXISTS `OPTIONS`;
-CREATE TABLE `OPTIONS`             --OPTION为保留关键字，所以只能用复数形式了
+CREATE TABLE `OPTIONS`             -- OPTION为保留关键字，所以只能用复数形式了
 (
   `id`          int         NOT NULL AUTO_INCREMENT,
   `question_id` int         NOT NULL,
