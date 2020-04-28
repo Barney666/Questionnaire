@@ -140,6 +140,7 @@ public class PaperServiceImpl implements PaperService {
                         for(OptionsVO optionsVO:optionsVOList){   //先都转成另一个VO
                             OptionsCaseVO optionsCaseVO=new OptionsCaseVO();
                             BeanUtils.copyProperties(optionsVO,optionsCaseVO);
+                            optionsCaseVO.setSelectedNum(0);
                             optionsCaseVOList.add(optionsCaseVO);
                         }
 
@@ -147,17 +148,20 @@ public class PaperServiceImpl implements PaperService {
 
                         for(AnswerVO answerVO:answerVOList){
                             String answerContent=answerVO.getAnswerContent();
-                            //TODO 把content split 再找这个optionid的caseVO的num+1
-                        }
-
-
-
-                        for(OptionsVO optionsVO:optionsVOList){
-                            int optionId=optionsVO.getId();
+                            String[] optionIdList=answerContent.split(",");
+                            for(String idStr:optionIdList){
+                                int id=Integer.valueOf(idStr);
+                                for(OptionsCaseVO optionsCaseVO:optionsCaseVOList){
+                                    if(optionsCaseVO.getId()==id){
+                                        optionsCaseVO.setSelectedNum(optionsCaseVO.getSelectedNum()+1);
+                                        break;
+                                    }
+                                }
+                            }
                         }
                         List backData=new ArrayList();
                         backData.add(questionVO);
-//                    backData.add(optionsVOList);
+                        backData.add(optionsCaseVOList);
                         allPaperData.add(backData);
                     }
                 }
