@@ -11,13 +11,13 @@ import java.util.List;
 @Repository
 public interface QuestionMapper {
 
-    int addQuestion(QuestionVO questionVO);
+    int addQuestion(Question question);
 
-    void updateQuestion(QuestionVO questionVO);
+    void updateQuestion(Question question);
 
     Question selectByQuestionId(int id);
 
-    void deleteQuestion(int quesitonId);
+    void deleteQuestion(int questionId);
 
-    List<QuestionVO> selectByPaperId(int paperId);
+    List<Question> selectByPaperId(int paperId);
 }

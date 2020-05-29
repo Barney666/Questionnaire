@@ -1,14 +1,17 @@
 package com.computer.network.serviceImpl;
 
+import com.computer.network.enums.PaperStatus;
 import com.computer.network.mapper.AnswerMapper;
 import com.computer.network.mapper.OptionsMapper;
 import com.computer.network.mapper.PaperMapper;
 import com.computer.network.mapper.QuestionMapper;
-import com.computer.network.po.Paper;
+import com.computer.network.po.Options;
+import com.computer.network.po.Question;
 import com.computer.network.service.PaperService;
 import com.computer.network.vo.*;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
@@ -18,7 +21,6 @@ import java.util.List;
 
 @Service
 public class PaperServiceImpl implements PaperService {
-    private final static String INVALIDATION="问卷已失效";
     private final static String EMPTY="无效ID";
     private final static String USER_EMPTY="用户未创建任何问卷";
     @Autowired
@@ -34,7 +36,7 @@ public class PaperServiceImpl implements PaperService {
     public ResponseVO addPaper(PaperVO paperVO) {
         try {
             paperMapper.addPaper(paperVO);
-            return ResponseVO.buildSuccess();
+            return ResponseVO.buildSuccess(paperVO);
         }catch (Exception e){
             System.out.println(e);
             return ResponseVO.buildFailure(e.getMessage());
@@ -44,11 +46,9 @@ public class PaperServiceImpl implements PaperService {
     @Override
     public ResponseVO updatePaper(PaperVO paperVO) {
         try {
-            Paper paper=paperMapper.selectByPaperId(paperVO.getId());
+            PaperVO paper=paperMapper.selectByPaperId(paperVO.getId());
             if(paper==null)
                 return ResponseVO.buildFailure(EMPTY);
-            else if(paper.getStatus()==0 || new SimpleDateFormat("yyyy-MM-dd").format(new Date()).compareTo(paper.getEndTime())>0)
-                return ResponseVO.buildFailure(INVALIDATION);    //问卷被撤销or现在的时间已经过了问卷的endTime
             else{
                 paperMapper.updatePaper(paperVO);
                 return ResponseVO.buildSuccess();
@@ -58,31 +58,48 @@ public class PaperServiceImpl implements PaperService {
             return ResponseVO.buildFailure(e.getMessage());
         }
     }
-
-    @Override
-    public ResponseVO invalidatePaper(int paperId) {
-        try {
-            Paper paper=paperMapper.selectByPaperId(paperId);
-            if(paper==null)
-                return ResponseVO.buildFailure(EMPTY);
-            else{
-                paperMapper.invalidatePaper(paperId);
-                return ResponseVO.buildSuccess();
+    @Scheduled(cron = "0 0/1 * * * ?")    //每分钟检查一次
+    void checkPaperStatus(){
+        List<PaperVO> paperVOList=paperMapper.getTimePapers();
+        for(PaperVO paperVO:paperVOList){
+            Date date = new Date();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String currentDate = sdf.format(date);
+            if(paperVO.getStatus()==PaperStatus.INIT){    //没开放的开放它
+                if(currentDate.compareTo(paperVO.getStartTime())>=0)
+                    paperMapper.changeStatus(PaperStatus.START,paperVO.getId());
             }
-        }catch (Exception e){
-            System.out.println(e);
-            return ResponseVO.buildFailure(e.getMessage());
+            else if(paperVO.getStatus()==PaperStatus.START){   //没结束的结束它
+                if(currentDate.compareTo(paperVO.getEndTime())>=0)
+                    paperMapper.changeStatus(PaperStatus.STOP,paperVO.getId());
+            }
         }
     }
+
+//    @Override
+//    public ResponseVO invalidatePaper(int paperId) {
+//        try {
+//            PaperVO paper=paperMapper.selectByPaperId(paperId);
+//            if(paper==null)
+//                return ResponseVO.buildFailure(EMPTY);
+//            else{
+//                paperMapper.invalidatePaper(paperId);
+//                return ResponseVO.buildSuccess();
+//            }
+//        }catch (Exception e){
+//            System.out.println(e);
+//            return ResponseVO.buildFailure(e.getMessage());
+//        }
+//    }
 
     @Override
     public ResponseVO getUserPapers(int userId) {
         try {
-            List<PaperVO> paperIdList=paperMapper.getUserPapers(userId);
-            if(paperIdList==null)
+            List<PaperVO> paperVOList=paperMapper.getUserPapers(userId);
+            if(paperVOList==null)
                 return ResponseVO.buildFailure(USER_EMPTY);
             else
-                return ResponseVO.buildSuccess(paperIdList);
+                return ResponseVO.buildSuccess(paperVOList);
         }catch (Exception e){
             System.out.println(e);
             return ResponseVO.buildFailure(e.getMessage());
@@ -92,25 +109,26 @@ public class PaperServiceImpl implements PaperService {
     @Override
     public ResponseVO checkPaper(int paperId) {
         try {
-            Paper paper=paperMapper.selectByPaperId(paperId);
-            if(paper==null)
+            PaperVO paperVO=paperMapper.selectByPaperId(paperId);
+            if(paperVO==null)
                 return ResponseVO.buildFailure(EMPTY);
-            else if(paper.getStatus()==0 || new SimpleDateFormat("yyyy-MM-dd").format(new Date()).compareTo(paper.getEndTime())>0)
-                return ResponseVO.buildFailure(INVALIDATION);
-            else{
-                //泛型表示的每个List：第一个放QuestionVO，第二个放List<OptionVO>
-                List<List> allPaperData=new ArrayList<>();
-                List<QuestionVO> questionVOList=questionMapper.selectByPaperId(paperId);
-                for(QuestionVO questionVO:questionVOList){
-                    int questionId=questionVO.getId();
-                    List<OptionsVO> optionsVOList=optionsMapper.selectByQuestionId(questionId);
-                    List backData=new ArrayList();
-                    backData.add(questionVO);
-                    backData.add(optionsVOList);
-                    allPaperData.add(backData);
-                }
-                return ResponseVO.buildSuccess(allPaperData);
+            PaperDetail paperDetail=new PaperDetail();
+            BeanUtils.copyProperties(paperVO,paperDetail);
+
+            List<QuestionVO> questionVOList=new ArrayList<>();
+            List<Question> questionList=questionMapper.selectByPaperId(paperId);
+            for(Question question:questionList){
+                int questionId=question.getId();
+                List<Options> optionsList=optionsMapper.selectByQuestionId(questionId);
+
+                QuestionVO questionVO=new QuestionVO();
+                BeanUtils.copyProperties(question,questionVO);
+                questionVO.setOptions(optionsList);
+                questionVOList.add(questionVO);
             }
+            paperDetail.setQuestionList(questionVOList);
+            return ResponseVO.buildSuccess(paperDetail);
+
         }catch (Exception e){
             System.out.println(e);
             return ResponseVO.buildFailure(e.getMessage());
@@ -120,52 +138,55 @@ public class PaperServiceImpl implements PaperService {
     @Override
     public ResponseVO reviewPaper(int paperId) {
         try {
-            Paper paper=paperMapper.selectByPaperId(paperId);
-            if(paper==null)
+            PaperVO paperVO=paperMapper.selectByPaperId(paperId);
+            if(paperVO==null)
                 return ResponseVO.buildFailure(EMPTY);
-            else if(paper.getStatus()==0 || new SimpleDateFormat("yyyy-MM-dd").format(new Date()).compareTo(paper.getEndTime())>0)
-                return ResponseVO.buildFailure(INVALIDATION);
             else{
-                //泛型表示的每个List：第一个放QuestionVO，第二个放List<OptionCaseVO>
-                List<List> allPaperData=new ArrayList<>();
+                PaperStatistic paperStatistic=new PaperStatistic();
+                BeanUtils.copyProperties(paperVO,paperStatistic);
 
-                List<QuestionVO> questionVOList=questionMapper.selectByPaperId(paperId);
+                List<QuestionStatistic> questionStatisticList=new ArrayList<>();
+                List<Question> questionList=questionMapper.selectByPaperId(paperId);
 
-                for(QuestionVO questionVO:questionVOList){
+                for(Question question:questionList){
 
-                    if(questionVO.getType()!=3){    //单选题和多选题
-                        int questionId=questionVO.getId();
-                        List<OptionsVO> optionsVOList=optionsMapper.selectByQuestionId(questionId);
-                        List<OptionsCaseVO> optionsCaseVOList=new ArrayList<>();
-                        for(OptionsVO optionsVO:optionsVOList){   //先都转成另一个VO
-                            OptionsCaseVO optionsCaseVO=new OptionsCaseVO();
-                            BeanUtils.copyProperties(optionsVO,optionsCaseVO);
-                            optionsCaseVO.setSelectedNum(0);
-                            optionsCaseVOList.add(optionsCaseVO);
+                    QuestionStatistic questionStatistic=new QuestionStatistic();
+                    BeanUtils.copyProperties(question,questionStatistic);
+
+                    int questionId=question.getId();
+
+                    if(question.getType()!=3){    //单选题和多选题
+                        List<Options> optionsList=optionsMapper.selectByQuestionId(questionId);
+                        List<OptionStatistic> optionStatisticList =new ArrayList<>();
+                        for(Options options:optionsList){   //先都转成另一个VO
+                            OptionStatistic optionStatistic =new OptionStatistic();
+                            BeanUtils.copyProperties(options, optionStatistic);
+                            optionStatistic.setSelectedNum(0);   //后面用于+1
+                            optionStatisticList.add(optionStatistic);
                         }
 
                         List<AnswerVO> answerVOList=answerMapper.selectByQuestionId(questionId);
 
                         for(AnswerVO answerVO:answerVOList){
                             String answerContent=answerVO.getAnswerContent();
-                            String[] optionIdList=answerContent.split(",");
-                            for(String idStr:optionIdList){
-                                int id=Integer.valueOf(idStr);
-                                for(OptionsCaseVO optionsCaseVO:optionsCaseVOList){
-                                    if(optionsCaseVO.getId()==id){
-                                        optionsCaseVO.setSelectedNum(optionsCaseVO.getSelectedNum()+1);
+                            String[] optionSequenceList=answerContent.split(",");
+                            for(String sequenceStr:optionSequenceList){
+                                int sequence=Integer.valueOf(sequenceStr);
+                                for(OptionStatistic optionStatistic : optionStatisticList){
+                                    if(optionStatistic.getSequence()==sequence){
+                                        optionStatistic.setSelectedNum(optionStatistic.getSelectedNum()+1);
                                         break;
                                     }
                                 }
                             }
                         }
-                        List backData=new ArrayList();
-                        backData.add(questionVO);
-                        backData.add(optionsCaseVOList);
-                        allPaperData.add(backData);
+                        questionStatistic.setOptionStatistics(optionStatisticList);
                     }
+                    questionStatistic.setFilledInNum(answerMapper.selectByQuestionId(questionId).size());   //此题填写人数
+                    questionStatisticList.add(questionStatistic);
                 }
-                return ResponseVO.buildSuccess(allPaperData);
+                paperStatistic.setQuestionStatistics(questionStatisticList);
+                return ResponseVO.buildSuccess(paperStatistic);
             }
         }catch (Exception e){
             System.out.println(e);

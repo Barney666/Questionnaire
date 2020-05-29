@@ -10,4 +10,14 @@
     <select id="selectByQuestionId" resultType="com.computer.network.vo.AnswerVO">
         select * from ANSWER where question_id=#{questionId} order by id
     </select>
+
+
+<!--    <resultMap id="AnswerVO" type="com.example.hotel.vo.AnswerVO">-->
+<!--        <result column="id" property="id"></result>-->
+<!--        <result column="question_id" property="questionId"></result>-->
+<!--        <result column="paper_id" property="paperId"></result>-->
+<!--        <result column="question_type" property="questionType"></result>-->
+<!--        <result column="create_time" property="createTime"></result>-->
+<!--        <result column="answer_content" property="answerContent"></result>-->
+<!--    </resultMap>-->
 </mapper>

@@ -6,7 +6,6 @@ import com.computer.network.vo.ResponseVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/question")
@@ -14,9 +13,9 @@ public class QuestionController {
     @Autowired
     QuestionService questionService;
 
-    @PostMapping("/addQuestions")
-    public ResponseVO addQuestions(@RequestBody List<QuestionVO> questionVOList){
-        return questionService.addQuestions(questionVOList);
+    @GetMapping("/{paperId}/addQuestion")
+    public ResponseVO addQuestion(@PathVariable Integer paperId){
+        return questionService.addQuestion(paperId);
     }
 
     @PostMapping("/updateQuestion")
@@ -25,7 +24,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{questionId}/deleteQuestion")
-    public ResponseVO deleteQuestion(@PathVariable int questionId){
+    public ResponseVO deleteQuestion(@PathVariable Integer questionId){
         return questionService.deleteQuestion(questionId);
     }
 }

@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface QuestionService {
 
-    ResponseVO addQuestions(List<QuestionVO> questionVOList);
+    ResponseVO addQuestion(Integer paperId);
 
     ResponseVO updateQuestion(QuestionVO questionVO);
 
-    ResponseVO deleteQuestion(int questionId);
+    ResponseVO deleteQuestion(Integer questionId);
 }

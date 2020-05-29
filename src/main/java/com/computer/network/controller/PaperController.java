@@ -22,10 +22,10 @@ public class PaperController {
         return paperService.updatePaper(paperVO);
     }
 
-    @GetMapping("/{paperId}/invalidatePaper")
-    public ResponseVO invalidatePaper(@PathVariable Integer paperId){
-        return paperService.invalidatePaper(paperId);
-    }
+//    @GetMapping("/{paperId}/invalidatePaper")      //撤销问卷暂时好像还没用上
+//    public ResponseVO invalidatePaper(@PathVariable Integer paperId){
+//        return paperService.invalidatePaper(paperId);
+//    }
 
     @GetMapping("/{userId}/getUserPapers")
     public ResponseVO getUserPapers(@PathVariable Integer userId){

@@ -13,11 +13,11 @@ public interface OptionsMapper {
 
     int addOption(OptionsVO optionsVO);
 
+    Options findOption(OptionsVO optionsVO);
+
     void updateOption(OptionsVO optionsVO);
 
-    Options selectById(int id);
+    void deleteByQuestionId(Integer questionId);
 
-    void deleteOption(int id);
-
-    List<OptionsVO> selectByQuestionId(int questionId);
+    List<Options> selectByQuestionId(int questionId);
 }

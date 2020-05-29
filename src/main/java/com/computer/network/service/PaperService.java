@@ -9,7 +9,7 @@ public interface PaperService {
 
     ResponseVO updatePaper(PaperVO paperVO);
 
-    ResponseVO invalidatePaper(int paperId);
+//    ResponseVO invalidatePaper(int paperId);
 
     ResponseVO getUserPapers(int userId);
 

@@ -1,5 +1,6 @@
 package com.computer.network.po;
 
+import com.computer.network.enums.PaperStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -12,5 +13,5 @@ public class Paper {
     private String description;
     private String startTime;
     private String endTime;
-    private Integer status;
+    private PaperStatus status;
 }

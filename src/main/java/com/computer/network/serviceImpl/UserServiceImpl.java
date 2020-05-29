@@ -1,7 +1,6 @@
 package com.computer.network.serviceImpl;
 
 import com.computer.network.mapper.UserMapper;
-import com.computer.network.po.User;
 import com.computer.network.service.UserService;
 import com.computer.network.vo.ResponseVO;
 import com.computer.network.vo.UserVO;
