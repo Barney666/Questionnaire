@@ -14,3 +14,5 @@ mybatis:
   mapper-locations: classpath:mapperImpl/*Mapper.xml
   configuration:
     map-underscore-to-camel-case: true     # 开启驼峰原则，将数据库带下划线的字段自动转为驼峰原则的命名
+server:
+  port: 8999
