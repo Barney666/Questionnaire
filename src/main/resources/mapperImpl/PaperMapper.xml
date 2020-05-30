@@ -8,12 +8,12 @@
     <update id="updatePaper" parameterType="com.computer.network.vo.PaperVO">
         update PAPER set title=#{title},description=#{description},start_time=#{startTime},end_time=#{endTime},status=#{status} where id=#{id}
     </update>
+    <delete id="deletePaper">
+        delete from PAPER where id=#{paperId}
+    </delete>
     <select id="selectByPaperId" resultType="com.computer.network.vo.PaperVO">
         select * from PAPER where id=#{paperId}
     </select>
-<!--    <update id="invalidatePaper">-->
-<!--        update PAPER set status=0 where id=#{paperId}-->
-<!--    </update>-->
     <select id="getUserPapers" resultType="com.computer.network.vo.PaperVO">
         select * from PAPER where user_id=#{userId}
     </select>

@@ -76,21 +76,25 @@ public class PaperServiceImpl implements PaperService {
         }
     }
 
-//    @Override
-//    public ResponseVO invalidatePaper(int paperId) {
-//        try {
-//            PaperVO paper=paperMapper.selectByPaperId(paperId);
-//            if(paper==null)
-//                return ResponseVO.buildFailure(EMPTY);
-//            else{
-//                paperMapper.invalidatePaper(paperId);
-//                return ResponseVO.buildSuccess();
-//            }
-//        }catch (Exception e){
-//            System.out.println(e);
-//            return ResponseVO.buildFailure(e.getMessage());
-//        }
-//    }
+    @Override
+    public ResponseVO deletePaper(int paperId) {
+        try {
+            PaperVO paper=paperMapper.selectByPaperId(paperId);
+            if(paper==null)
+                return ResponseVO.buildFailure(EMPTY);
+            else{
+                paperMapper.deletePaper(paperId);
+                List<Question> questionList=questionMapper.selectByPaperId(paperId);
+                for(Question question:questionList)
+                    optionsMapper.deleteByQuestionId(question.getId());
+                questionMapper.deleteByPaperId(paperId);
+                return ResponseVO.buildSuccess();
+            }
+        }catch (Exception e){
+            System.out.println(e);
+            return ResponseVO.buildFailure(e.getMessage());
+        }
+    }
 
     @Override
     public ResponseVO getUserPapers(int userId) {

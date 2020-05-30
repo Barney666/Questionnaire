@@ -19,5 +19,7 @@ public interface QuestionMapper {
 
     void deleteQuestion(int questionId);
 
+    void deleteByPaperId(int paperId);
+
     List<Question> selectByPaperId(int paperId);
 }

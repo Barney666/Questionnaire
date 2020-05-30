@@ -9,13 +9,15 @@
     <update id="updateQuestion" parameterType="com.computer.network.po.Question">
         update QUESTION set type=#{type},title=#{title} where id=#{id}
     </update>
-
     <select id="selectByQuestionId" resultType="com.computer.network.po.Question">
         select * from QUESTION where id=#{id}
     </select>
 
     <delete id="deleteQuestion">
         delete from QUESTION where id=#{questionId}
+    </delete>
+    <delete id="deleteByPaperId">
+        delete from QUESTION where paper_id=#{paperId}
     </delete>
 
     <select id="selectByPaperId" resultType="com.computer.network.po.Question">

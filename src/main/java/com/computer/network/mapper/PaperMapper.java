@@ -19,7 +19,7 @@ public interface PaperMapper {
 
     PaperVO selectByPaperId(int paperId);
 
-//    void invalidatePaper(int paperId);
+    void deletePaper(int paperId);
 
     List<PaperVO> getUserPapers(int userId);
 
