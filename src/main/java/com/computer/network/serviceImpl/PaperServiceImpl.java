@@ -186,6 +186,9 @@ public class PaperServiceImpl implements PaperService {
                         }
                         questionStatistic.setOptionStatistics(optionStatisticList);
                     }
+                    else{    //简答题
+                        questionStatistic.setAnswerVOList(answerMapper.selectByQuestionId(questionId));
+                    }
                     questionStatistic.setFilledInNum(answerMapper.selectByQuestionId(questionId).size());   //此题填写人数
                     questionStatisticList.add(questionStatistic);
                 }
