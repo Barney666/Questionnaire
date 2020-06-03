@@ -23,7 +23,7 @@ public class QuestionServiceImpl implements QuestionService {
 
     @Override
     public ResponseVO addQuestion(Integer paperId) {
-        try {
+        try {     //前端的逻辑是 添加问题时啥也没有是空的 只返回questionId 真正填写完了调updateQuestion
             Question question=new Question();
             question.setPaperId(paperId);
             questionMapper.addQuestion(question);
