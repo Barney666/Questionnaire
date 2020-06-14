@@ -4,15 +4,24 @@
 
 <mapper namespace="com.computer.network.mapper.AnswerMapper">
     <insert id="addAnswer" parameterType="com.computer.network.vo.AnswerVO">
-        insert into ANSWER(paper_id,question_id,question_type,create_time,answer_content) values(#{paperId},#{questionId},#{questionType},#{createTime},#{answerContent})
+        insert into ANSWER(paper_id,question_id,question_type,create_time,answer_content,user_uuid) values(#{paperId},#{questionId},#{questionType},#{createTime},#{answerContent},#{user_uuid})
     </insert>
 
     <select id="selectByQuestionId" resultType="com.computer.network.vo.AnswerVO">
         select * from ANSWER where question_id=#{questionId} order by id
     </select>
+    <select id="selectUUIDbyPaper" resultType="java.lang.String">
+        select user_uuid from  answer where paper_id = #{paperId}
+    </select>
+    <select id="selectAnswersByUUID" resultType="com.computer.network.vo.AnswerVO">
+        select * from answer where user_uuid=#{UUID}
+    </select>
+    <select id="selectOption" resultType="java.lang.String">
+        select content from options where question_id=#{question_id} and sequence=#{sequence}
+     </select>
 
 
-<!--    <resultMap id="AnswerVO" type="com.example.hotel.vo.AnswerVO">-->
+    <!--    <resultMap id="AnswerVO" type="com.example.hotel.vo.AnswerVO">-->
 <!--        <result column="id" property="id"></result>-->
 <!--        <result column="question_id" property="questionId"></result>-->
 <!--        <result column="paper_id" property="paperId"></result>-->

@@ -47,4 +47,5 @@
 | 问题类型 | question_type  | int          | N    | 1：单选<br/>2：多选<br/>3：简答                              |
 | 答题时间 | create_time    | datetime     | N    |                                                              |
 | 答题内容 | answer_content | varchar(512) | N    | 1：单选格式类似sequence<br/>2：多选格式类似sequence,sequence<br/>3：简答格式类似xxxx |
+| 标识符   | user_uuid      | varchar(32)  | N    | 用于标识是同一个用户填写的问卷，用uuid生成，相同表示是同一份问卷的答案 |
 
