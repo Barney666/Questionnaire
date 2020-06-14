@@ -55,6 +55,7 @@ public class AnswerServiceImpl implements AnswerService {
         for (String user_uuid:users){
             List<AnswerVO> answerVOS = answerMapper.selectAnswersByUUID(user_uuid);
             List<String> ansString = new ArrayList<>();
+            ansString.add(answerVOS.get(0).getCreateTime());
             for(AnswerVO answerVO:answerVOS) {
                 if (answerVO.getQuestionType() == 3){
                     ansString.add(answerVO.getAnswerContent());
