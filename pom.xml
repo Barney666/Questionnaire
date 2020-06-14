@@ -54,6 +54,12 @@
             <!--原本的版本太低了 和java11不兼容-->
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.47</version>
+        </dependency>
+        <!--转json，测试用-->
 
     </dependencies>
 
