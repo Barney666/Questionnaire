@@ -4,7 +4,7 @@
 
 <mapper namespace="com.computer.network.mapper.AnswerMapper">
     <insert id="addAnswer" parameterType="com.computer.network.vo.AnswerVO">
-        insert into ANSWER(paper_id,question_id,question_type,create_time,answer_content) values(#{paperId},#{questionId},#{questionType},#{createTime},#{answerContent})
+        insert into ANSWER(paper_id,question_id,question_type,create_time,answer_content,user_uuid) values(#{paperId},#{questionId},#{questionType},#{createTime},#{answerContent},#{user_uuid})
     </insert>
 
     <select id="selectByQuestionId" resultType="com.computer.network.vo.AnswerVO">

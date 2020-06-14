@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AnswerServiceImpl implements AnswerService {
@@ -32,8 +33,12 @@ public class AnswerServiceImpl implements AnswerService {
                 if(paperVO.getStatus()== PaperStatus.STOP)
                     return ResponseVO.buildFailure(INVALIDATION);
             }
-            for(AnswerVO answerVO:answerVOList)
+            String uuid = UUID.randomUUID().toString();  //转化为String对象
+            uuid = uuid.replace("-", ""); //因为UUID本身为32位只是生成时多了“-”，所以将它们去点就可
+            for(AnswerVO answerVO:answerVOList) {
+                answerVO.setUser_uuid(uuid);
                 answerMapper.addAnswer(answerVO);
+            }
             return ResponseVO.buildSuccess();
         }catch (Exception e){
             System.out.println(e);
